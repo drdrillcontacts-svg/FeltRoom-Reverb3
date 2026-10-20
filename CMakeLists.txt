@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 3.22)
+project(FeltRoom VERSION 2.0.0 LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
+include(FetchContent)
+FetchContent_Declare(JUCE GIT_REPOSITORY https://github.com/juce-framework/JUCE.git GIT_TAG 8.0.10 GIT_SHALLOW TRUE)
+FetchContent_MakeAvailable(JUCE)
+juce_add_plugin(FeltRoom COMPANY_NAME "D.A Production" BUNDLE_ID "com.dainstruments.feltroom" PLUGIN_MANUFACTURER_CODE Dazi PLUGIN_CODE Flrm FORMATS VST3 PRODUCT_NAME "FeltRoom" IS_SYNTH FALSE NEEDS_MIDI_INPUT FALSE NEEDS_MIDI_OUTPUT FALSE EDITOR_WANTS_KEYBOARD_FOCUS TRUE COPY_PLUGIN_AFTER_BUILD FALSE)
+juce_add_binary_data(FeltRoomAssets SOURCES Assets/piano.jpg)
+target_link_libraries(FeltRoom PRIVATE FeltRoomAssets juce::juce_audio_utils juce::juce_dsp PUBLIC juce::juce_recommended_config_flags juce::juce_recommended_lto_flags juce::juce_recommended_warning_flags)
+target_compile_definitions(FeltRoom PRIVATE JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0 JUCE_VST3_CAN_REPLACE_VST2=0)
+target_sources(FeltRoom PRIVATE Source/PluginProcessor.cpp Source/PluginEditor.cpp)
+
+juce_generate_juce_header(FeltRoom)
